@@ -442,4 +442,50 @@
                 }
 
                 aportes.forEach(a => {
-                    tbody.innerHTML +=
+                    tbody.innerHTML += `
+                        <tr class="border-b text-sm">
+                            <td class="p-3 font-medium">${a.socio_id}</td>
+                            <td class="p-3">${a.mes_que_cubre}</td>
+                            <td class="p-3">$ ${Number(a.valor_recibido).toLocaleString()}</td>
+                            <td class="p-3">${a.fecha_pago}</td>
+                            <td class="p-3">${a.origen}</td>
+                            <td class="p-3">
+                                <button onclick="confirmarPagoAdmin(${a.id})" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-3 py-1 rounded shadow">
+                                    Confirmar Pago
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error("Error al cargar aportes pendientes:", error);
+            }
+        }
+
+        async function confirmarPagoAdmin(aporteId) {
+            try {
+                const response = await fetch(`${API_URL}/api/admin/aportes/confirmar/${aporteId}`, {
+                    method: 'PUT',
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
+                if (response.ok) {
+                    alert("¡Pago confirmado correctamente!");
+                    cargarAportesPendientesAdmin();
+                }
+            } catch (error) {
+                alert("Error al confirmar el aporte.");
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('usuario_actual');
+            document.getElementById('app-container').classList.add('hidden');
+            document.getElementById('auth-container').classList.remove('hidden');
+        }
+    </script>
+    <!-- ========================================== -->
+    <!-- FIN: BLOQUE DE SCRIPT JAVASCRIPT -->
+    <!-- ========================================== -->
+
+</body>
+</html>
