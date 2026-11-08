@@ -256,7 +256,9 @@
 
         async function cargarAportesSocio(socioId) {
             try {
-                const response = await fetch(`${API_URL}/api/aportes/socio/${socioId}`, {headers: { 'ngrok-skip-browser-warning': 'true' }});
+                const response = await fetch(`${API_URL}/api/aportes/socio/${socioId}`, {
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
                 const aportes = await response.json();
             
                 console.log("Aportes del socio:", aportes);
