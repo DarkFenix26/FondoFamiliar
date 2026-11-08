@@ -8,7 +8,9 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- LOGIN / REGISTRO -->
+    <!-- ========================================== -->
+    <!-- INICIO: CONTENEDOR DE AUTENTICACIÓN (LOGIN/REGISTRO) -->
+    <!-- ========================================== -->
     <div id="auth-container" class="flex-grow flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-md p-8 rounded-2xl shadow-lg border border-slate-200">
             <div class="text-center mb-8">
@@ -64,8 +66,13 @@
             </form>
         </div>
     </div>
+    <!-- ========================================== -->
+    <!-- FIN: CONTENEDOR DE AUTENTICACIÓN -->
+    <!-- ========================================== -->
 
-    <!-- PANEL PRINCIPAL -->
+    <!-- ========================================== -->
+    <!-- INICIO: PANEL PRINCIPAL (POST-LOGIN) -->
+    <!-- ========================================== -->
     <div id="app-container" class="hidden flex-grow flex flex-col">
         <header class="bg-indigo-900 text-white shadow-md">
             <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -78,47 +85,89 @@
         </header>
 
         <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full space-y-6">
+            
+            <!-- ========================================== -->
+            <!-- INICIO: VISTA DEL SOCIO -->
+            <!-- ========================================== -->
             <section id="view-socio" class="space-y-6">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex justify-between items-center">
+                <!-- Tarjeta de Bienvenida -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h2 id="welcome-user" class="text-2xl font-bold text-indigo-900">Bienvenido</h2>
                         <p class="text-sm text-slate-500">Estado de cuenta y aportes consolidados</p>
                     </div>
                     <span class="inline-block bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-medium">Activo / Al Día</span>
-                    <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+                </div>
+
+                <!-- Grid adaptativo: Formulario de reporte a la izquierda, Historial a la derecha -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Formulario Reportar Pago -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h3 class="text-lg font-semibold text-slate-700 mb-4">Reportar Pago de Cuota</h3>
+                        <form id="form-reportar-pago" onsubmit="reportarPago(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Mes que Cubre</label>
+                                <input type="text" id="rep-mes" placeholder="Ej: Noviembre 2026" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-indigo-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Valor Pagado ($)</label>
+                                <input type="number" step="0.01" id="rep-valor" required placeholder="50000" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-indigo-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Fecha de la Transacción</label>
+                                <input type="date" id="rep-fecha" required class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-indigo-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Número de Comprobante / Referencia</label>
+                                <input type="text" id="rep-comprobante" required placeholder="Ej: Ref 12345678" class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-indigo-600">
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow-md">Enviar Comprobante a Revisión</button>
+                        </form>
+                    </div>
+
+                    <!-- Tabla Historial de Aportes -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col">
                         <h3 class="text-lg font-semibold text-slate-700 mb-4">Historial de Mis Aportes</h3>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
+                        <div class="overflow-x-auto w-full flex-1">
+                            <table class="w-full text-left border-collapse min-w-[500px]">
                                 <thead>
-                                    <tr class="bg-slate-100 text-slate-600 text-sm">
+                                    <tr class="bg-slate-50 text-slate-400 text-xs uppercase tracking-wider">
                                         <th class="p-3">ID</th>
-                                        <th class="p-3">Fecha de Pago</th>
-                                        <th class="p-3">Mes que Cubre</th>
-                                        <th class="p-3">Valor Recibido</th>
+                                        <th class="p-3">Fecha</th>
+                                        <th class="p-3">Mes Cubre</th>
+                                        <th class="p-3">Valor</th>
                                         <th class="p-3">Estado</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tabla-aportes-socio">
-                                </tbody>
+                                <tbody id="tabla-aportes-socio" class="divide-y divide-slate-100 text-sm"></tbody>
                             </table>
                         </div>
                     </div>
+
                 </div>
             </section>
+            <!-- ========================================== -->
+            <!-- FIN: VISTA DEL SOCIO -->
+            <!-- ========================================== -->
 
+            <!-- ========================================== -->
+            <!-- INICIO: VISTA DEL ADMINISTRADOR -->
+            <!-- ========================================== -->
             <section id="view-admin" class="space-y-6 hidden">
-                <div class="bg-indigo-900 text-white p-6 rounded-xl shadow-sm flex justify-between items-center">
+                <div class="bg-indigo-900 text-white p-6 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h2 class="text-2xl font-bold">Panel de Administración General</h2>
-                        <p class="text-sm text-indigo-200">Aprobación de nuevos socios y control del fondo.</p>
+                        <p class="text-sm text-indigo-200">Aprobación de nuevos socios y control de pagos y aportes.</p>
                     </div>
-                    <button onclick="cargarSolicitudesPendientes()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-semibold px-4 py-2 rounded-lg text-sm shadow transition">🔄 Actualizar Lista</button>
+                    <button onclick="cargarDatosAdmin()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-semibold px-4 py-2 rounded-lg text-sm shadow transition">🔄 Actualizar Listas</button>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-6">
+                <!-- Tabla Solicitudes de Registro Pendientes -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                     <h3 class="font-bold text-indigo-900 mb-4">Solicitudes de Registro Pendientes de Aprobación</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-400 text-xs uppercase tracking-wider">
                                     <th class="p-3">ID</th>
@@ -132,10 +181,40 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Tabla Pagos de Socios Pendientes por Confirmar -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="font-bold text-indigo-900 mb-4">Pagos de Socios Pendientes por Confirmar</h3>
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left border-collapse min-w-[650px]">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-400 text-xs uppercase tracking-wider">
+                                    <th class="p-3">Socio ID</th>
+                                    <th class="p-3">Mes Cubre</th>
+                                    <th class="p-3">Valor</th>
+                                    <th class="p-3">Fecha Pago</th>
+                                    <th class="p-3">Comprobante</th>
+                                    <th class="p-3">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-aportes-pendientes" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
+            <!-- ========================================== -->
+            <!-- FIN: VISTA DEL ADMINISTRADOR -->
+            <!-- ========================================== -->
+
         </main>
     </div>
+    <!-- ========================================== -->
+    <!-- FIN: PANEL PRINCIPAL -->
+    <!-- ========================================== -->
 
+    <!-- ========================================== -->
+    <!-- INICIO: BLOQUE DE SCRIPT JAVASCRIPT -->
+    <!-- ========================================== -->
     <script>
         const API_URL = "https://reaffirm-implicit-feast.ngrok-free.dev";
 
@@ -207,11 +286,15 @@
                     document.getElementById('app-container').classList.remove('hidden');
 
                     const user = result.usuario;
+                    
+                    // Guardar datos del usuario activo en LocalStorage para el reporte de pagos
+                    localStorage.setItem('usuario_actual', JSON.stringify(user));
+
                     if (user.rol === 'admin') {
                         document.getElementById('view-admin').classList.remove('hidden');
                         document.getElementById('view-socio').classList.add('hidden');
                         document.getElementById('user-role-badge').innerText = "Rol: Administrador";
-                        cargarSolicitudesPendientes();
+                        cargarDatosAdmin();
                     } else {
                         document.getElementById('view-socio').classList.remove('hidden');
                         document.getElementById('view-admin').classList.add('hidden');
@@ -228,6 +311,12 @@
             }
         }
 
+        // Cargar datos en el panel de administrador (Socios pendientes + Pagos pendientes)
+        function cargarDatosAdmin() {
+            cargarSolicitudesPendientes();
+            cargarAportesPendientesAdmin();
+        }
+
         async function cargarSolicitudesPendientes() {
             try {
                 const response = await fetch(`${API_URL}/api/admin/pendientes`, {
@@ -238,7 +327,7 @@
                 tbody.innerHTML = "";
         
                 if (socios.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay solicitudes pendientes.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay solicitudes de registro pendientes.</td></tr>`;
                     return;
                 }
         
@@ -262,7 +351,10 @@
 
         async function aprobarSocio(id) {
             try {
-                const response = await fetch(`${API_URL}/api/admin/aprobar/${id}`, { method: 'PUT' });
+                const response = await fetch(`${API_URL}/api/admin/aprobar/${id}`, { 
+                    method: 'PUT',
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
                 if (response.ok) {
                     alert("¡Socio aprobado con éxito!");
                     cargarSolicitudesPendientes();
@@ -280,33 +372,74 @@
                 const aportes = await response.json();
                 const tbody = document.getElementById('tabla-aportes-socio');
                 tbody.innerHTML = "";
+                
                 if (aportes.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No tienes aportes registrados todavía.</td></tr>`;
                     return;
                 }
+                
                 aportes.forEach(a => {
+                    let badgeColor = a.estado_aporte === 'aplicado' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
                     tbody.innerHTML += `
                         <tr class="border-b border-slate-100 text-sm">
                             <td class="p-3">${a.id}</td>
                             <td class="p-3">${a.fecha_pago}</td>
                             <td class="p-3">${a.mes_que_cubre}</td>
                             <td class="p-3">$ ${Number(a.valor_recibido).toLocaleString()}</td>
-                            <td class="p-3"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 rounded text-xs">${a.estado_aporte}</span></td>
+                            <td class="p-3"><span class="px-2 py-1 rounded text-xs font-semibold ${badgeColor}">${a.estado_aporte}</span></td>
                         </tr>
                     `;
                 });
-
-                
-                console.log("Aportes del socio:", aportes);
             } catch (error) {
                 console.error("Error al cargar los aportes:", error);
             }
         }
 
-        function logout() {
-            document.getElementById('app-container').classList.add('hidden');
-            document.getElementById('auth-container').classList.remove('hidden');
+        async function reportarPago(event) {
+            event.preventDefault();
+            const usuarioGuardado = JSON.parse(localStorage.getItem('usuario_actual'));
+
+            const data = {
+                socio_id: usuarioGuardado.id,
+                fecha_pago: document.getElementById('rep-fecha').value,
+                mes_que_cubre: document.getElementById('rep-mes').value,
+                valor_recibido: parseFloat(document.getElementById('rep-valor').value),
+                origen: document.getElementById('rep-comprobante').value,
+                estado_aporte: "revisión"
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/api/aportes/reportar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert("¡Comprobante enviado con éxito! Quedará en revisión.");
+                    document.getElementById('form-reportar-pago').reset();
+                    cargarAportesSocio(usuarioGuardado.id);
+                } else {
+                    alert("Error al reportar el pago.");
+                }
+            } catch (error) {
+                console.error("Error de red:", error);
+            }
         }
-    </script>
-</body>
-</html>
+
+        async function cargarAportesPendientesAdmin() {
+            try {
+                const response = await fetch(`${API_URL}/api/admin/aportes/pendientes`, {
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
+                const aportes = await response.json();
+                const tbody = document.getElementById('tabla-aportes-pendientes');
+                tbody.innerHTML = "";
+
+                if (aportes.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No hay pagos pendientes por confirmar.</td></tr>`;
+                    return;
+                }
+
+                aportes.forEach(a => {
+                    tbody.innerHTML +=
