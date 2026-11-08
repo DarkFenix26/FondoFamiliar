@@ -210,16 +210,18 @@
 
         async function cargarSolicitudesPendientes() {
             try {
-                const response = await fetch(`${API_URL}/api/admin/pendientes`), {headers:{'ngrok-skip-browser-warning': 'true'}};
+                const response = await fetch(`${API_URL}/api/admin/pendientes`, {
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
                 const socios = await response.json();
                 const tbody = document.getElementById('tabla-pendientes');
                 tbody.innerHTML = "";
-
+        
                 if (socios.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay solicitudes pendientes.</td></tr>`;
                     return;
                 }
-
+        
                 socios.forEach(s => {
                     tbody.innerHTML += `
                         <tr>
