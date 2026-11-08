@@ -199,6 +199,8 @@
                         document.getElementById('view-admin').classList.add('hidden');
                         document.getElementById('user-role-badge').innerText = "Rol: Socio";
                         document.getElementById('welcome-user').innerText = `Bienvenido, ${user.nombre}`;
+
+                        cargarAportesSocio(user.id);
                     }
                 } else {
                     alert(result.detail);
