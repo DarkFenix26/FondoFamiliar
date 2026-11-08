@@ -210,7 +210,7 @@
 
         async function cargarSolicitudesPendientes() {
             try {
-                const response = await fetch(`${API_URL}/api/admin/pendientes`);
+                const response = await fetch(`${API_URL}/api/admin/pendientes`), {headers:{'ngrok-skip-browser-warning': 'true'}};
                 const socios = await response.json();
                 const tbody = document.getElementById('tabla-pendientes');
                 tbody.innerHTML = "";
